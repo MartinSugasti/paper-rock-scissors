@@ -1,19 +1,40 @@
+function playGame(e) {
+  e.target.style.display = 'none';
+  buttons.forEach((button) => button.style.display = 'block');
+}
+
+function playRound(e) {
+  let playerSelection = e.target.textContent;
+  let computerSelection = computerPlay();
+  let result = singleRound(playerSelection, computerSelection);
+
+  if (
+    playerCount === 3 ||
+    computerCount === 3 ||
+    (rounds === 4 && Math.abs(playerCount - computerCount) > 1) ||
+    rounds === 5
+  ) {
+    finishGame();
+  } else {
+    printParcialResult(result);
+  }
+}
+
 function computerPlay() {
   return ['Rock', 'Paper', 'Scissors'][Math.floor(Math.random() * (3 - 0)) + 0];
 }
 
-function playerPlay() {
-  let option = prompt('Choose your option:');
-  return option.charAt(0).toUpperCase() + option.slice(1).toLowerCase();
-}
-
 function singleRound(playerSelection, computerSelection) {
+  rounds++;
+
   if (playerSelection === computerSelection) {
     return 'It\'s a tie.';
   } else if (optionOneWins(playerSelection, computerSelection)) {
+    playerCount++;
     return 'You got it!'
   } else {
-    return '.. machines will conquer the world?'
+    computerCount++;
+    return 'Machines will conquer the world?'
   }
 }
 
@@ -25,47 +46,42 @@ function optionOneWins(optionOne, optionTwo) {
   );
 }
 
-function game() {
-  let userParagraph = document.querySelector('#user-score');
-  let computerParagraph = document.querySelector('#computer-score');
-  let resultParagraph = document.querySelector('.result');
+function finishGame() {
+  let div = document.querySelector('#result');
+  rounds = 0;
+  playerCount = 0;
+  computerCount = 0;
 
-  let userScore = 0;
-  let computerScore = 0;
+  let finalResult = (playerCount > computerCount) ?
+  ' Luckily human kind have specimens like you!' :
+  (playerCount === computerCount) ?
+    ' That was close :|' :
+    ' That\'s it. I\'m getting out of here!';
 
-  for (let i = 0; i < 5; i++) {
-    let computerSelection = computerPlay();
-    let playerSelection = playerPlay();
-    let result = singleRound(playerSelection, computerSelection);
-    console.log(result);
+  div.textContent = ` The final score is ${playerCount} to ${computerCount}!` + finalResult;
 
-    if (result === 'You got it!') {
-      userScore++;
-    } else if (result === '.. machines will conquer the world?') {
-      computerScore++;
-    }
-
-    if (userScore === 3 || computerScore === 3 || i === 4) {
-      break;
-    }
-
-    alert(result + ` You are ${userScore} to ${computerScore}!` )
-  }
-
-  let finalResult = (userScore > computerScore) ?
-    'Luckily human kind have specimens like you!' :
-    (userScore === computerScore) ?
-      'That was close :|' :
-      'That\'s it. I\'m getting out of here!';
-
-  userParagraph.textContent = userScore;
-  computerParagraph.textContent = computerScore;
-  resultParagraph.textContent = finalResult;
+  toggleButtons();
 }
 
-
-let myButton = document.querySelector('button');
-myButton.onclick = function() {
-  game();
+function printParcialResult(result) {
+  let div = document.querySelector('#result');
+  div.textContent = result + ` The score is ${playerCount} to ${computerCount}! Let's go for the round ${rounds + 1}`;
 }
 
+function toggleButtons() {
+  let button = document.querySelector('#play');
+  button.style.display = 'block';
+
+  let buttons = document.querySelectorAll('.option-button');
+  buttons.forEach((button) => button.style.display = 'none');
+}
+
+let rounds = 0;
+let playerCount = 0;
+let computerCount = 0;
+
+let button = document.querySelector('#play');
+button.addEventListener('click', playGame);
+
+let buttons = document.querySelectorAll('.option-button');
+buttons.forEach((button) => button.addEventListener('click', playRound));

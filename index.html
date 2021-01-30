@@ -7,10 +7,13 @@
     <link href="styles/style.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <button>Let's play.. or let's save the world?</button>
-    <p>Your score: <span id="user-score">-</span></p>
-    <p>Computer's score: <span id="computer-score">-</span></p>
-    <p class="result"></p>
+    <button id="play">Play game</button>
+
+    <button id="rock" data-key="rock" class="option-button" hidden>Rock</button>
+    <button id="paper" data-key="paper" class="option-button" hidden>Paper</button>
+    <button id="scissors" data-key="scissors" class="option-button" hidden>Scissors</button>
+
+    <div id="result"></div>
 
     <script src="scripts/main.js"></script>
   </body>
