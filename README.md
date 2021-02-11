@@ -1,1 +1,1 @@
-[Live preview](https://martinsugasti.github.io/paper_rock_scissors/)
+[Live preview](https://martinsugasti.github.io/paper-rock-scissors/)
